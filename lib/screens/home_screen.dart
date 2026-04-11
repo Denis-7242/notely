@@ -79,9 +79,9 @@ class _HomeScreenState extends State<HomeScreen> {
         final theme = Theme.of(context);
 
         return Scaffold(
-          backgroundColor: colorScheme.background,
+          backgroundColor: colorScheme.surface,
           appBar: AppBar(
-            backgroundColor: colorScheme.background,
+            backgroundColor: colorScheme.surface,
             elevation: 0,
             scrolledUnderElevation: 0,
             title: Row(
@@ -104,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   'Notely',
                   style: theme.textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.w700,
-                    color: colorScheme.onBackground,
+                    color: colorScheme.onSurface,
                   ),
                 ),
               ],
@@ -174,16 +174,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   onChanged: (query) {
                     noteProvider.setSearchQuery(query);
                   },
-                  elevation: const MaterialStatePropertyAll(0),
-                  backgroundColor: MaterialStatePropertyAll(
-                    colorScheme.surfaceVariant.withOpacity(0.6),
+                  elevation: const WidgetStatePropertyAll(0),
+                  backgroundColor: WidgetStatePropertyAll(
+                    colorScheme.surfaceContainerHighest.withOpacity(0.6),
                   ),
-                  shape: MaterialStatePropertyAll(
+                  shape: WidgetStatePropertyAll(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  padding: const MaterialStatePropertyAll(
+                  padding: const WidgetStatePropertyAll(
                     EdgeInsets.symmetric(horizontal: 16),
                   ),
                 ),
@@ -259,7 +259,7 @@ class _HomeScreenState extends State<HomeScreen> {
               isSearching ? 'No results found' : 'No notes yet',
               style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.w600,
-                color: colorScheme.onBackground,
+                color: colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: 8),
@@ -268,7 +268,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ? 'Try a different search term'
                   : 'Tap the + button below to create your first note',
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: colorScheme.onBackground.withOpacity(0.55),
+                color: colorScheme.onSurface.withOpacity(0.55),
               ),
               textAlign: TextAlign.center,
             ),

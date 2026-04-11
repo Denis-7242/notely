@@ -152,11 +152,11 @@ class NoteCard extends StatelessWidget {
       ),
       alignment: Alignment.centerRight,
       padding: const EdgeInsets.only(right: 20),
-      child: Column(
+      child: const Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.delete_rounded, color: Colors.white, size: 28),
-          const SizedBox(height: 4),
+          Icon(Icons.delete_rounded, color: Colors.white, size: 28),
+          SizedBox(height: 4),
           Text(
             'Delete',
             style: TextStyle(

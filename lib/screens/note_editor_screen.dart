@@ -120,9 +120,9 @@ class _NoteEditorScreenState extends State<NoteEditorScreen> {
     return WillPopScope(
       onWillPop: _onWillPop, // Intercept back button
       child: Scaffold(
-        backgroundColor: colorScheme.background,
+        backgroundColor: colorScheme.surface,
         appBar: AppBar(
-          backgroundColor: colorScheme.background,
+          backgroundColor: colorScheme.surface,
           elevation: 0,
           scrolledUnderElevation: 0,
           leading: IconButton(
@@ -187,12 +187,12 @@ class _NoteEditorScreenState extends State<NoteEditorScreen> {
                         autofocus: !_isEditing, // Auto-focus when creating new
                         style: theme.textTheme.headlineSmall?.copyWith(
                           fontWeight: FontWeight.w700,
-                          color: colorScheme.onBackground,
+                          color: colorScheme.onSurface,
                         ),
                         decoration: InputDecoration(
                           hintText: 'Note title...',
                           hintStyle: theme.textTheme.headlineSmall?.copyWith(
-                            color: colorScheme.onBackground.withOpacity(0.3),
+                            color: colorScheme.onSurface.withOpacity(0.3),
                             fontWeight: FontWeight.w700,
                           ),
                           border: InputBorder.none,
@@ -217,13 +217,13 @@ class _NoteEditorScreenState extends State<NoteEditorScreen> {
                           Icon(
                             Icons.edit_calendar_outlined,
                             size: 14,
-                            color: colorScheme.onBackground.withOpacity(0.35),
+                            color: colorScheme.onSurface.withOpacity(0.35),
                           ),
                           const SizedBox(width: 6),
                           Text(
                             _isEditing ? 'Editing note' : 'New note',
                             style: theme.textTheme.labelSmall?.copyWith(
-                              color: colorScheme.onBackground.withOpacity(0.35),
+                              color: colorScheme.onSurface.withOpacity(0.35),
                             ),
                           ),
                         ],
@@ -242,13 +242,13 @@ class _NoteEditorScreenState extends State<NoteEditorScreen> {
                       TextFormField(
                         controller: _contentController,
                         style: theme.textTheme.bodyLarge?.copyWith(
-                          color: colorScheme.onBackground,
+                          color: colorScheme.onSurface,
                           height: 1.7, // Line spacing for readability
                         ),
                         decoration: InputDecoration(
                           hintText: 'Start writing your note here...',
                           hintStyle: theme.textTheme.bodyLarge?.copyWith(
-                            color: colorScheme.onBackground.withOpacity(0.3),
+                            color: colorScheme.onSurface.withOpacity(0.3),
                             height: 1.7,
                           ),
                           border: InputBorder.none,
