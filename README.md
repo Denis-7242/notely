@@ -2,7 +2,7 @@
 
 A beginner-friendly Flutter mobile application for creating, managing, and searching personal notes. Built with **Hive** for local storage and **Provider** for state management.
 
-> **University Project** — Designed as a clean, well-commented codebase for learning and presentation purposes.
+> **University Project** — Designed as a clean, well-commented codes for presentation purposes.
 
 ---
 
@@ -191,4 +191,4 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## 👨‍💻 Author
 
-Built as a university Flutter project. Feel free to fork, modify, and learn from the code!
+Built as a class Flutter project. Feel free to fork, modify, and learn from the code!
