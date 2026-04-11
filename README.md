@@ -79,7 +79,7 @@ Make sure you have the following installed:
 **1. Clone or download the project**
 
 ```bash
-git clone https://github.com/your-username/notely.git
+git clone https://github.com/Denis-7242/notely.git
 cd notely
 ```
 
