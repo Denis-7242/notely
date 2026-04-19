@@ -51,34 +51,53 @@ class NotelyApp extends StatelessWidget {
 
   // Light Theme
   ThemeData _buildLightTheme() {
-    const primaryColor = Color(0xFF4F6EF7); // Modern indigo-blue
+    const primaryColor = Color(0xFF6366F1); // Modern Indigo
+    const backgroundC = Color(0xFFF8FAFC); // Slate 50
+    const surfaceC = Color(0xFFFFFFFF);
 
     return ThemeData(
-      useMaterial3: true, // Use the latest Material Design
+      useMaterial3: true,
       colorScheme: ColorScheme.fromSeed(
         seedColor: primaryColor,
         brightness: Brightness.light,
         primary: primaryColor,
-        background: const Color(0xFFF8F9FE),
-        surface: Colors.white,
+        surface: surfaceC,
+        background: backgroundC,
       ),
-      fontFamily: 'Roboto',
-      // Rounded cards by default
+      fontFamily: 'Inter', // Modern sans-serif look (fallback to Roboto if not present)
       cardTheme: CardThemeData(
         elevation: 0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        color: surfaceC,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: BorderSide(color: Colors.grey.withOpacity(0.1), width: 1),
+        ),
       ),
-      // Rounded input fields
       inputDecorationTheme: InputDecorationTheme(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         filled: true,
+        fillColor: Colors.grey.withOpacity(0.05),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: primaryColor, width: 1.5),
+        ),
+      ),
+      textTheme: const TextTheme(
+        headlineSmall: TextStyle(fontWeight: FontWeight.w800, letterSpacing: -0.5),
+        titleMedium: TextStyle(fontWeight: FontWeight.w600),
+        bodyLarge: TextStyle(height: 1.6),
       ),
     );
   }
 
   // Dark Theme
   ThemeData _buildDarkTheme() {
-    const primaryColor = Color(0xFF7B93FF); // Lighter blue for dark mode
+    const primaryColor = Color(0xFF818CF8); // Lighter Indigo
+    const backgroundC = Color(0xFF0F172A); // Slate 900
+    const surfaceC = Color(0xFF1E293B); // Slate 800
 
     return ThemeData(
       useMaterial3: true,
@@ -86,17 +105,34 @@ class NotelyApp extends StatelessWidget {
         seedColor: primaryColor,
         brightness: Brightness.dark,
         primary: primaryColor,
-        background: const Color(0xFF0F1117),
-        surface: const Color(0xFF1C1F2E),
+        surface: surfaceC,
+        background: backgroundC,
       ),
-      fontFamily: 'Roboto',
+      fontFamily: 'Inter',
       cardTheme: CardThemeData(
         elevation: 0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        color: surfaceC,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: BorderSide(color: Colors.white.withOpacity(0.05), width: 1),
+        ),
       ),
       inputDecorationTheme: InputDecorationTheme(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         filled: true,
+        fillColor: Colors.white.withOpacity(0.05),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: primaryColor, width: 1.5),
+        ),
+      ),
+      textTheme: const TextTheme(
+        headlineSmall: TextStyle(fontWeight: FontWeight.w800, letterSpacing: -0.5),
+        titleMedium: TextStyle(fontWeight: FontWeight.w600),
+        bodyLarge: TextStyle(height: 1.6),
       ),
     );
   }

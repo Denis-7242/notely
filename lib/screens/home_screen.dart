@@ -60,18 +60,17 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void _openEditor(BuildContext context, {String? noteId}) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => NoteEditorScreen(noteId: noteId),
-      ),
-    );
-  }
+    void _openEditor(BuildContext context, {String? noteId}) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => NoteEditorScreen(noteId: noteId),
+        ),
+      );
+    }
 
   @override
   Widget build(BuildContext context) {
-    // Consumer<NoteProvider> rebuilds this widget when notes change
     return Consumer2<NoteProvider, ThemeProvider>(
       builder: (context, noteProvider, themeProvider, _) {
         final notes = noteProvider.notes;
@@ -79,58 +78,55 @@ class _HomeScreenState extends State<HomeScreen> {
         final theme = Theme.of(context);
 
         return Scaffold(
-          backgroundColor: colorScheme.surface,
+          backgroundColor: colorScheme.background,
           appBar: AppBar(
-            backgroundColor: colorScheme.surface,
+            backgroundColor: colorScheme.background,
             elevation: 0,
             scrolledUnderElevation: 0,
+            centerTitle: false,
             title: Row(
               children: [
-                // App logo / icon
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: colorScheme.primary,
-                    borderRadius: BorderRadius.circular(10),
+                    color: colorScheme.primary.withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
                     Icons.edit_note_rounded,
-                    color: colorScheme.onPrimary,
-                    size: 20,
+                    color: colorScheme.primary,
+                    size: 22,
                   ),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 12),
                 Text(
                   'Notely',
                   style: theme.textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w800,
                     color: colorScheme.onSurface,
+                    letterSpacing: -0.5,
                   ),
                 ),
               ],
             ),
             actions: [
-              // Note count badge
               if (notes.isNotEmpty)
                 Container(
-                  margin: const EdgeInsets.only(right: 8),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 4,
-                  ),
+                  margin: const EdgeInsets.only(right: 12),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: colorScheme.primaryContainer,
+                    color: colorScheme.primary.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: colorScheme.primary.withOpacity(0.2)),
                   ),
                   child: Text(
-                    '${notes.length} note${notes.length == 1 ? '' : 's'}',
+                    '${notes.length} notes',
                     style: theme.textTheme.labelSmall?.copyWith(
-                      color: colorScheme.onPrimaryContainer,
+                      color: colorScheme.primary,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
-              // Dark/Light mode toggle
               IconButton(
                 icon: AnimatedSwitcher(
                   duration: const Duration(milliseconds: 300),
@@ -139,29 +135,27 @@ class _HomeScreenState extends State<HomeScreen> {
                         ? Icons.light_mode_rounded
                         : Icons.dark_mode_rounded,
                     key: ValueKey(themeProvider.isDarkMode),
-                    color: colorScheme.primary,
+                    color: colorScheme.onSurface.withOpacity(0.7),
                   ),
                 ),
                 tooltip: 'Toggle theme',
                 onPressed: () => themeProvider.toggleTheme(),
               ),
-              const SizedBox(width: 4),
+              const SizedBox(width: 8),
             ],
           ),
           body: Column(
             children: [
-              // ---- Search Bar ----
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                 child: SearchBar(
                   controller: _searchController,
-                  hintText: 'Search notes...',
+                  hintText: 'Search your notes...',
                   leading: Icon(
                     Icons.search_rounded,
-                    color: colorScheme.onSurface.withOpacity(0.5),
+                    color: colorScheme.onSurface.withOpacity(0.4),
                   ),
                   trailing: [
-                    // Show clear button only when there's text
                     if (_searchController.text.isNotEmpty)
                       IconButton(
                         icon: const Icon(Icons.clear_rounded),
@@ -174,13 +168,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   onChanged: (query) {
                     noteProvider.setSearchQuery(query);
                   },
-                  elevation: const WidgetStatePropertyAll(0),
+                  elevation: WidgetStatePropertyAll(0),
                   backgroundColor: WidgetStatePropertyAll(
-                    colorScheme.surfaceContainerHighest.withOpacity(0.6),
+                    colorScheme.surface.withOpacity(0.7),
                   ),
                   shape: WidgetStatePropertyAll(
                     RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(16),
+                      side: BorderSide(color: colorScheme.outlineVariant.withOpacity(0.3)),
                     ),
                   ),
                   padding: const WidgetStatePropertyAll(
@@ -189,12 +184,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
 
-              // ---- Notes List or Empty State ----
               Expanded(
                 child: notes.isEmpty
                     ? _buildEmptyState(context, noteProvider.searchQuery)
                     : ListView.builder(
-                        padding: const EdgeInsets.only(bottom: 100),
+                        padding: const EdgeInsets.only(top: 8, bottom: 100),
                         itemCount: notes.length,
                         itemBuilder: (context, index) {
                           final note = notes[index];
@@ -211,17 +205,17 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
-
-          // ---- Floating Action Button ----
           floatingActionButton: FloatingActionButton.extended(
             onPressed: () => _openEditor(context),
             icon: const Icon(Icons.add_rounded),
             label: const Text(
               'New Note',
-              style: TextStyle(fontWeight: FontWeight.w600),
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
             ),
             backgroundColor: colorScheme.primary,
             foregroundColor: colorScheme.onPrimary,
+            elevation: 4,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           ),
         );
       },
@@ -239,36 +233,36 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Illustration icon
             Container(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.all(32),
               decoration: BoxDecoration(
-                color: colorScheme.primaryContainer.withOpacity(0.5),
+                color: colorScheme.primary.withOpacity(0.05),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 isSearching
                     ? Icons.search_off_rounded
                     : Icons.note_add_outlined,
-                size: 56,
-                color: colorScheme.primary.withOpacity(0.7),
+                size: 64,
+                color: colorScheme.primary.withOpacity(0.4),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 32),
             Text(
               isSearching ? 'No results found' : 'No notes yet',
               style: theme.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w700,
                 color: colorScheme.onSurface,
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
             Text(
               isSearching
-                  ? 'Try a different search term'
-                  : 'Tap the + button below to create your first note',
+                  ? 'We couldn\'t find any notes matching your search'
+                  : 'Your thoughts will appear here. Tap the button to create your first note',
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: colorScheme.onSurface.withOpacity(0.55),
+                color: colorScheme.onSurface.withOpacity(0.5),
+                fontSize: 15,
               ),
               textAlign: TextAlign.center,
             ),

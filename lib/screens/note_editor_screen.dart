@@ -118,27 +118,26 @@ class _NoteEditorScreenState extends State<NoteEditorScreen> {
     final colorScheme = theme.colorScheme;
 
     return WillPopScope(
-      onWillPop: _onWillPop, // Intercept back button
+      onWillPop: _onWillPop,
       child: Scaffold(
-        backgroundColor: colorScheme.surface,
+        backgroundColor: colorScheme.background,
         appBar: AppBar(
-          backgroundColor: colorScheme.surface,
+          backgroundColor: colorScheme.background,
           elevation: 0,
           scrolledUnderElevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new_rounded),
+            icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
             onPressed: () async {
               if (await _onWillPop()) Navigator.pop(context);
             },
           ),
           title: Text(
             _isEditing ? 'Edit Note' : 'New Note',
-            style: theme.textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.w600,
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w700,
             ),
           ),
           actions: [
-            // Save button in the app bar
             Padding(
               padding: const EdgeInsets.only(right: 12),
               child: FilledButton.icon(
@@ -158,7 +157,7 @@ class _NoteEditorScreenState extends State<NoteEditorScreen> {
                   backgroundColor: colorScheme.primary,
                   foregroundColor: colorScheme.onPrimary,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                 ),
               ),
@@ -169,81 +168,70 @@ class _NoteEditorScreenState extends State<NoteEditorScreen> {
           key: _formKey,
           child: Column(
             children: [
-              // ---- Divider ----
-              Divider(
-                height: 1,
-                color: colorScheme.outlineVariant.withOpacity(0.3),
-              ),
-
               Expanded(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // ---- Title Field ----
                       TextFormField(
                         controller: _titleController,
-                        autofocus: !_isEditing, // Auto-focus when creating new
+                        autofocus: !_isEditing,
                         style: theme.textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w800,
                           color: colorScheme.onSurface,
+                          letterSpacing: -0.5,
                         ),
                         decoration: InputDecoration(
                           hintText: 'Note title...',
                           hintStyle: theme.textTheme.headlineSmall?.copyWith(
                             color: colorScheme.onSurface.withOpacity(0.3),
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w800,
                           ),
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.zero,
                         ),
-                        maxLines: null, // Allow multi-line title
+                        maxLines: null,
                         textCapitalization: TextCapitalization.sentences,
-                        // Validation rule: title is required
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
                             return 'Please enter a title for your note';
                           }
-                          return null; // null means "valid"
+                          return null;
                         },
                       ),
 
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 12),
 
                       // ---- Metadata row ----
                       Row(
                         children: [
                           Icon(
-                            Icons.edit_calendar_outlined,
+                            Icons.calendar_today_rounded,
                             size: 14,
-                            color: colorScheme.onSurface.withOpacity(0.35),
+                            color: colorScheme.onSurface.withOpacity(0.4),
                           ),
-                          const SizedBox(width: 6),
+                          const SizedBox(width: 8),
                           Text(
                             _isEditing ? 'Editing note' : 'New note',
                             style: theme.textTheme.labelSmall?.copyWith(
-                              color: colorScheme.onSurface.withOpacity(0.35),
+                              color: colorScheme.onSurface.withOpacity(0.4),
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ],
                       ),
 
-                      const SizedBox(height: 16),
-
-                      // ---- Divider between title and content ----
-                      Divider(
-                        color: colorScheme.outlineVariant.withOpacity(0.4),
-                      ),
-
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 24),
 
                       // ---- Content Field ----
                       TextFormField(
                         controller: _contentController,
                         style: theme.textTheme.bodyLarge?.copyWith(
                           color: colorScheme.onSurface,
-                          height: 1.7, // Line spacing for readability
+                          height: 1.7,
+                          fontSize: 16,
                         ),
                         decoration: InputDecoration(
                           hintText: 'Start writing your note here...',
@@ -254,13 +242,11 @@ class _NoteEditorScreenState extends State<NoteEditorScreen> {
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.zero,
                         ),
-                        maxLines: null, // Unlimited lines
+                        maxLines: null,
                         keyboardType: TextInputType.multiline,
                         textCapitalization: TextCapitalization.sentences,
                       ),
-
-                      // Bottom padding so keyboard doesn't cover text
-                      const SizedBox(height: 200),
+                      const SizedBox(height: 300),
                     ],
                   ),
                 ),
@@ -269,22 +255,21 @@ class _NoteEditorScreenState extends State<NoteEditorScreen> {
               // ---- Bottom action bar ----
               Container(
                 padding: EdgeInsets.only(
-                  left: 16,
-                  right: 16,
-                  top: 12,
-                  bottom: MediaQuery.of(context).padding.bottom + 12,
+                  left: 24,
+                  right: 24,
+                  top: 20,
+                  bottom: MediaQuery.of(context).padding.bottom + 20,
                 ),
                 decoration: BoxDecoration(
-                  color: colorScheme.surface,
+                  color: colorScheme.background,
                   border: Border(
                     top: BorderSide(
-                      color: colorScheme.outlineVariant.withOpacity(0.3),
+                      color: colorScheme.outlineVariant.withOpacity(0.2),
                     ),
                   ),
                 ),
                 child: Row(
                   children: [
-                    // Cancel button
                     Expanded(
                       child: OutlinedButton.icon(
                         onPressed: () async {
@@ -293,28 +278,27 @@ class _NoteEditorScreenState extends State<NoteEditorScreen> {
                         icon: const Icon(Icons.close_rounded, size: 18),
                         label: const Text('Cancel'),
                         style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(14),
                           ),
                         ),
                       ),
                     ),
                     const SizedBox(width: 12),
-                    // Save button
                     Expanded(
                       flex: 2,
                       child: FilledButton.icon(
                         onPressed: _isSaving ? null : _saveNote,
-                        icon: const Icon(Icons.save_outlined, size: 18),
+                        icon: const Icon(Icons.save_rounded, size: 18),
                         label: const Text(
                           'Save Note',
-                          style: TextStyle(fontWeight: FontWeight.w600),
+                          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                         ),
                         style: FilledButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(14),
                           ),
                         ),
                       ),

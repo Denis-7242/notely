@@ -24,117 +24,116 @@ class NoteCard extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    // Dismissible lets the user swipe left to delete
     return Dismissible(
-      key: Key(note.id), // Each Dismissible needs a unique key
-      direction: DismissDirection.endToStart, // Swipe left only
+      key: Key(note.id),
+      direction: DismissDirection.endToStart,
       background: _buildSwipeBackground(colorScheme),
-      // Confirm before actually deleting
       confirmDismiss: (_) async {
-        onDelete(); // We handle the dialog in the parent
-        return false; // Don't auto-dismiss; let the dialog decide
+        onDelete();
+        return false;
       },
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-          decoration: BoxDecoration(
-            color: colorScheme.surface,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: colorScheme.shadow.withOpacity(0.08),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
-            border: Border.all(
-              color: colorScheme.outlineVariant.withOpacity(0.5),
-              width: 1,
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // ---- Title Row ----
-                Row(
-                  children: [
-                    // Note icon
-                    Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: colorScheme.primaryContainer,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Icon(
-                        Icons.sticky_note_2_outlined,
-                        size: 16,
-                        color: colorScheme.onPrimaryContainer,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    // Title — expands to fill available space
-                    Expanded(
-                      child: Text(
-                        note.title,
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: colorScheme.onSurface,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    // Delete button
-                    IconButton(
-                      icon: Icon(
-                        Icons.delete_outline,
-                        size: 20,
-                        color: colorScheme.error.withOpacity(0.7),
-                      ),
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                      onPressed: onDelete,
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 8),
-
-                // ---- Content Preview ----
-                if (note.content.isNotEmpty)
-                  Text(
-                    note.content,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: colorScheme.onSurface.withOpacity(0.65),
-                      height: 1.4,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-
-                const SizedBox(height: 10),
-
-                // ---- Date Row ----
-                Row(
-                  children: [
-                    Icon(
-                      Icons.access_time_rounded,
-                      size: 12,
-                      color: colorScheme.onSurface.withOpacity(0.4),
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      _formatDate(note.updatedDate),
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: colorScheme.onSurface.withOpacity(0.4),
-                      ),
-                    ),
-                  ],
+      child: Hero(
+        tag: note.id,
+        child: GestureDetector(
+          onTap: onTap,
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            decoration: BoxDecoration(
+              color: colorScheme.surface,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: colorScheme.shadow.withOpacity(0.05),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
                 ),
               ],
+              border: Border.all(
+                color: colorScheme.outlineVariant.withOpacity(0.3),
+                width: 1,
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: colorScheme.primary.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Icon(
+                          Icons.notes_rounded,
+                          size: 18,
+                          color: colorScheme.primary,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          note.title,
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: colorScheme.onSurface,
+                            fontSize: 17,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.delete_outline_rounded,
+                          size: 20,
+                          color: colorScheme.error.withOpacity(0.6),
+                        ),
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                        onPressed: onDelete,
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  if (note.content.isNotEmpty)
+                    Text(
+                      note.content,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: colorScheme.onSurface.withOpacity(0.6),
+                        height: 1.5,
+                        fontSize: 14,
+                      ),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+
+                  const SizedBox(height: 16),
+
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.calendar_today_rounded,
+                        size: 12,
+                        color: colorScheme.onSurface.withOpacity(0.3),
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        _formatDate(note.updatedDate),
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          color: colorScheme.onSurface.withOpacity(0.3),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
