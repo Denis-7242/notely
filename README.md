@@ -1,31 +1,33 @@
-# 📓 Notely — A Simple Digital Notebook
+# 📓 Notely — Premium Digital Notebook
 
-A beginner-friendly Flutter mobile application for creating, managing, and searching personal notes. Built with **Hive** for local storage and **Provider** for state management.
+A professional, modern Flutter mobile application for creating, managing, and searching personal notes. Designed with a high-end "Midnight" aesthetic, featuring a sophisticated dark mode and fluid user experience. Built with **Hive** for local storage and **Provider** for state management.
 
-> **University Project** — Designed as a clean, well-commented codes for presentation purposes.
+> **University Project** — Optimized for presentation with a focus on modern UI/UX design, clean architecture, and professional polish.
 
 ---
 
-## 📱 Screenshots
+## 📱 Visual Experience
 
-| Home Screen (Light) | Home Screen (Dark) | Note Editor |
+| Home Screen (Light) | Home Screen (Premium Dark) | Note Editor |
 |---|---|---|
-| Note list with search bar | Dark mode toggle support | Add / edit with validation |
+| Clean, minimal, slate-based | Deep navy gradients & soft glows | Focus-driven writing space |
 
 ---
 
-## ✨ Features
+## ✨ Premium Features
 
-- **Create** new notes with a title and content
-- **Edit** existing notes (fields pre-filled automatically)
-- **Delete** notes with a confirmation dialog
-- **Search** notes by title or content in real time
-- **Dark mode / Light mode** toggle — preference saved across sessions
-- **Persistent storage** — notes survive app restarts using Hive
-- **Empty state** — friendly message when no notes exist
-- **Unsaved changes warning** — prompts before discarding edits
-- **Swipe to delete** — swipe a note card left to reveal the delete action
-- **Most recent first** — notes sorted by last edited date
+- **Modern UI/UX**: A clean, minimal design with rounded corners (20px), soft shadows, and a professional color palette.
+- **High-End Dark Mode**: A "Midnight" theme using deep navy tones (`#0F172A`), surface elevations (`#1E293B`), and vibrant indigo accents.
+- **Fluid Animations**: 
+  - `Hero` transitions between the note list and the editor.
+  - Smooth theme switching with `AnimatedSwitcher`.
+  - Interactive FAB with adaptive glow effects.
+- **Intelligent Search**: Real-time filtering of notes with a modern, floating search bar.
+- **Efficient Note Management**:
+  - **Create/Edit**: Focus-driven editor with a borderless design.
+  - **Delete**: Intuitive swipe-to-delete with a confirmation guard.
+  - **Persistence**: Notes are stored locally using the high-performance Hive NoSQL database.
+- **UX Polish**: Unsaved changes warnings, a friendly empty state, and a refined typography hierarchy.
 
 ---
 
@@ -35,7 +37,7 @@ A beginner-friendly Flutter mobile application for creating, managing, and searc
 notely/
 ├── pubspec.yaml                  # Dependencies & project config
 └── lib/
-    ├── main.dart                 # App entry point, theme setup, providers
+    ├── main.dart                 # App entry point, Premium Theme setup, providers
     ├── models/
     │   ├── note.dart             # Note data model with Hive annotations
     │   └── note.g.dart           # Auto-generated Hive type adapter
@@ -47,7 +49,7 @@ notely/
     │   ├── note_provider.dart    # State management with ChangeNotifier
     │   └── theme_provider.dart   # Dark/light mode state
     └── widgets/
-        └── note_card.dart        # Reusable note card widget
+        └── note_card.dart        # Reusable professional note card widget
 ```
 
 ---
@@ -56,7 +58,7 @@ notely/
 
 | Technology | Purpose |
 |---|---|
-| [Flutter](https://flutter.dev) | Cross-platform UI framework |
+| [Flutter](https://flutter.dev) | Cross-platform UI framework (Material 3) |
 | [Hive](https://pub.dev/packages/hive_flutter) | Fast local NoSQL database |
 | [Provider](https://pub.dev/packages/provider) | State management |
 | [UUID](https://pub.dev/packages/uuid) | Unique ID generation |
@@ -95,28 +97,6 @@ flutter pub get
 flutter run
 ```
 
-> **Note:** The `note.g.dart` Hive adapter file is already included in this project, so you do **not** need to run `build_runner`. In a production project you would add `*.g.dart` to `.gitignore` and regenerate it with:
-> ```bash
-> flutter pub run build_runner build
-> ```
-
----
-
-## 📦 Dependencies
-
-```yaml
-dependencies:
-  hive: ^2.2.3
-  hive_flutter: ^1.1.0
-  provider: ^6.1.1
-  uuid: ^4.3.3
-  intl: ^0.19.0
-
-dev_dependencies:
-  hive_generator: ^2.0.1
-  build_runner: ^2.4.8
-```
-
 ---
 
 ## 🧠 Architecture Overview
@@ -138,42 +118,24 @@ User Action → Screen → Provider → NoteStorage → Hive DB
 
 ---
 
-## 📋 Note Model
-
-Each note stores the following fields:
-
-| Field | Type | Description |
-|---|---|---|
-| `id` | `String` | Unique UUID identifier |
-| `title` | `String` | Note title |
-| `content` | `String` | Note body text |
-| `createdDate` | `DateTime` | When the note was first created |
-| `updatedDate` | `DateTime` | When the note was last edited |
-
----
-
 ## 🎓 Key Flutter Concepts Demonstrated
 
-This project is designed to teach the following Flutter concepts:
+This project showcases advanced Flutter UI and state management techniques:
 
-| Concept | File |
+| Concept | Implementation |
 |---|---|
-| `ChangeNotifier` + `Provider` | `note_provider.dart` |
-| `Consumer` / `context.read` | `home_screen.dart` |
-| `TextEditingController` | `note_editor_screen.dart` |
-| Form validation with `GlobalKey<FormState>` | `note_editor_screen.dart` |
-| Hive local storage with type adapters | `note_storage.dart`, `note.dart` |
-| `Dismissible` (swipe gesture) | `note_card.dart` |
-| Dark/Light `ThemeMode` | `main.dart` |
-| `WillPopScope` (back navigation guard) | `note_editor_screen.dart` |
-| `showDialog` confirmation dialogs | `home_screen.dart` |
-| Empty state UI pattern | `home_screen.dart` |
+| **State Management** | `ChangeNotifier` + `Provider` for global state |
+| **Local Persistence** | Hive NoSQL with custom type adapters |
+| **Advanced UI** | `Hero` animations, `LinearGradient` backgrounds, and `AnimatedSwitcher` |
+| **User Interaction** | `Dismissible` (swipe gestures) and `WillPopScope` (navigation guards) |
+| **Form Handling** | `TextEditingController` and `GlobalKey<FormState>` validation |
+| **Adaptive Theming** | Custom `ThemeData` for a premium Dark/Light mode experience |
 
 ---
 
 ## 🗺️ Roadmap / Possible Improvements
 
-- [ ] Note categories / tags
+- [ ] Note categories / tags with color coding
 - [ ] Pin important notes to the top
 - [ ] Rich text formatting (bold, italic, bullet lists)
 - [ ] Export notes as PDF or plain text
@@ -191,4 +153,6 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## 👨‍💻 Author
 
-Built as a class Flutter project. Feel free to fork, modify, and learn from the code!
+Made by **Denis** with ❤️ using Flutter. 
+
+Built as a professional Flutter showcase project. Feel free to fork, modify, and learn from the code!
