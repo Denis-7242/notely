@@ -95,9 +95,10 @@ class NotelyApp extends StatelessWidget {
 
   // Dark Theme
   ThemeData _buildDarkTheme() {
-    const primaryColor = Color(0xFF818CF8); // Lighter Indigo
-    const backgroundC = Color(0xFF0F172A); // Slate 900
-    const surfaceC = Color(0xFF1E293B); // Slate 800
+    const primaryColor = Color(0xFF818CF8); // Vibrant Indigo
+    const backgroundC = Color(0xFF0F172A); // Slate 900 (Deep Dark Blue)
+    const surfaceC = Color(0xFF1E293B); // Slate 800 (Surface/Cards)
+    const secondaryColor = Color(0xFFC7D5F0); // Soft Blue-Grey for secondary text
 
     return ThemeData(
       useMaterial3: true,
@@ -107,6 +108,9 @@ class NotelyApp extends StatelessWidget {
         primary: primaryColor,
         surface: surfaceC,
         background: backgroundC,
+        onSurface: const Color(0xFFF9FAFB), // Slate 50 (Near white)
+        onBackground: const Color(0xFFF9FAFB),
+        secondary: const Color(0xFF6366F1),
       ),
       fontFamily: 'Inter',
       cardTheme: CardThemeData(
@@ -129,10 +133,27 @@ class NotelyApp extends StatelessWidget {
           borderSide: const BorderSide(color: primaryColor, width: 1.5),
         ),
       ),
-      textTheme: const TextTheme(
-        headlineSmall: TextStyle(fontWeight: FontWeight.w800, letterSpacing: -0.5),
-        titleMedium: TextStyle(fontWeight: FontWeight.w600),
-        bodyLarge: TextStyle(height: 1.6),
+      textTheme: TextTheme(
+        headlineSmall: const TextStyle(
+          fontWeight: FontWeight.w800,
+          letterSpacing: -0.5,
+          color: Color(0xFFF9FAFB),
+        ),
+        titleMedium: const TextStyle(
+          fontWeight: FontWeight.w600,
+          color: Color(0xFFF9FAFB),
+        ),
+        bodyLarge: const TextStyle(
+          height: 1.6,
+          color: Color(0xFFF9FAFB),
+        ),
+        bodyMedium: const TextStyle(
+          color: Color(0xFF9CA3AF), // Slate 400 (Soft Grey)
+        ),
+        labelSmall: const TextStyle(
+          color: Color(0xFF64748B), // Slate 500
+          fontWeight: FontWeight.w500,
+        ),
       ),
     );
   }

@@ -23,6 +23,7 @@ class NoteCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final isDarkMode = theme.brightness == Brightness.dark;
 
     return Dismissible(
       key: Key(note.id),
@@ -43,13 +44,17 @@ class NoteCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: colorScheme.shadow.withOpacity(0.05),
+                  color: isDarkMode
+                      ? Colors.black.withOpacity(0.3)
+                      : colorScheme.shadow.withOpacity(0.05),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                 ),
               ],
               border: Border.all(
-                color: colorScheme.outlineVariant.withOpacity(0.3),
+                color: isDarkMode
+                    ? Colors.white.withOpacity(0.05)
+                    : colorScheme.outlineVariant.withOpacity(0.3),
                 width: 1,
               ),
             ),
