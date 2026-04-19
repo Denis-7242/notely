@@ -1,7 +1,7 @@
 # 📓 Notely — Premium Digital Notebook
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Denis-7242/notely/main/assets/logo.png" alt="Notely Logo" width="120">
+  <img src="assets/icon.png" alt="Notely Logo" width="120">
 </p>
 
 <p align="center">
@@ -102,6 +102,20 @@ This project serves as a masterclass in several advanced Flutter concepts:
 - **Custom Graphics**: Use of `LinearGradient` and `BoxShadow` for professional depth.
 - **Performance**: Optimized list rendering and state-driven rebuilds using `Consumer`.
 - **User Flow**: Implementing `WillPopScope` for critical data loss prevention.
+
+---
+
+## 🗺️ Roadmap & Future Evolution
+
+The journey doesn't end here. I'm planning the following enhancements to take Notely to the next level:
+
+- [ ] **Smart Categorization**: Implementation of tags and color-coded categories for better organization.
+- [ ] **Priority Pinning**: Ability to pin critical notes to the top of the feed.
+- [ ] **Rich Text Engine**: Integration of bold, italics, and bullet points for professional formatting.
+- [ ] **Universal Export**: Support for exporting notes as high-quality PDFs or plain text files.
+- [ ] **Cloud Synchronization**: Migration to a Firebase backend for seamless cross-device sync.
+- [ ] **Collaborative Sharing**: Ability to share specific notes via secure links.
+- [ ] **OS Integration**: Adding Home Screen widgets for instant access to top notes.
 
 ---
 
