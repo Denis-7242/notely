@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/note_provider.dart';
+import '../models/category.dart';
 
 class NoteEditorScreen extends StatefulWidget {
   // null means "create new", a string ID means "edit existing"
@@ -16,12 +17,16 @@ class _NoteEditorScreenState extends State<NoteEditorScreen> {
   // Controllers to read/write text field values
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
+  final TextEditingController _tagController = TextEditingController();
 
   // Key to validate the form
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool _isSaving = false; // Show loading indicator while saving
   bool _hasChanges = false; // Track unsaved changes for the back button
+
+  String? _selectedCategoryId;
+  List<String> _tags = [];
 
   // Is this an edit session? (true = editing, false = creating)
   bool get _isEditing => widget.noteId != null;
@@ -34,9 +39,11 @@ class _NoteEditorScreenState extends State<NoteEditorScreen> {
     if (_isEditing) {
       final noteProvider = context.read<NoteProvider>();
       // Find the note by ID
-      final note = noteProvider.notes.firstWhere((n) => n.id == widget.noteId);
+      final note = noteProvider.notes.firstWhere((n) => n.id == widget.noteId!);
       _titleController.text = note.title;
       _contentController.text = note.content;
+      _selectedCategoryId = note.categoryId;
+      _tags = List<String>.from(note.tags);
     }
 
     // Listen for any changes so we can warn the user before discarding
@@ -48,11 +55,30 @@ class _NoteEditorScreenState extends State<NoteEditorScreen> {
     if (!_hasChanges) setState(() => _hasChanges = true);
   }
 
+  void _addTag() {
+    final tag = _tagController.text.trim();
+    if (tag.isNotEmpty && !_tags.contains(tag)) {
+      setState(() {
+        _tags.add(tag);
+        _hasChanges = true;
+        _tagController.clear();
+      });
+    }
+  }
+
+  void _removeTag(String tag) {
+    setState(() {
+      _tags.remove(tag);
+      _hasChanges = true;
+    });
+  }
+
   @override
   void dispose() {
     // IMPORTANT: Always dispose controllers to prevent memory leaks
     _titleController.dispose();
     _contentController.dispose();
+    _tagController.dispose();
     super.dispose();
   }
 
@@ -70,12 +96,16 @@ class _NoteEditorScreenState extends State<NoteEditorScreen> {
         id: widget.noteId!,
         title: _titleController.text,
         content: _contentController.text,
+        tags: _tags,
+        categoryId: _selectedCategoryId,
       );
     } else {
       // Create a brand new note
       await noteProvider.addNote(
         title: _titleController.text,
         content: _contentController.text,
+        tags: _tags,
+        categoryId: _selectedCategoryId,
       );
     }
 
@@ -116,6 +146,7 @@ class _NoteEditorScreenState extends State<NoteEditorScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final noteProvider = context.read<NoteProvider>();
 
     return WillPopScope(
       onWillPop: _onWillPop,
@@ -221,6 +252,141 @@ class _NoteEditorScreenState extends State<NoteEditorScreen> {
                             ),
                           ),
                         ],
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // ---- Category Selection ----
+                      Text(
+                        'Category',
+                        style: theme.textTheme.labelLarge?.copyWith(
+                          color: colorScheme.onSurface.withOpacity(0.6),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      SizedBox(
+                        height: 50,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: [
+                            // No Category option
+                            GestureDetector(
+                              onTap: () => setState(() {
+                                _selectedCategoryId = null;
+                                _hasChanges = true;
+                              }),
+                              child: Container(
+                                margin: const EdgeInsets.only(right: 8),
+                                padding: const EdgeInsets.symmetric(horizontal: 12),
+                                decoration: BoxDecoration(
+                                  color: _selectedCategoryId == null
+                                      ? colorScheme.primary.withOpacity(0.2)
+                                      : colorScheme.surfaceVariant,
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(
+                                    color: _selectedCategoryId == null
+                                        ? colorScheme.primary
+                                        : Colors.transparent,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'None',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: _selectedCategoryId == null
+                                          ? colorScheme.primary
+                                          : colorScheme.onSurfaceVariant,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            ...noteProvider.categories.map((cat) => GestureDetector(
+                              onTap: () => setState(() {
+                                _selectedCategoryId = cat.id;
+                                _hasChanges = true;
+                              }),
+                              child: Container(
+                                margin: const EdgeInsets.only(right: 8),
+                                padding: const EdgeInsets.symmetric(horizontal: 12),
+                                decoration: BoxDecoration(
+                                  color: _selectedCategoryId == cat.id
+                                      ? Color(cat.colorValue).withOpacity(0.2)
+                                      : colorScheme.surfaceVariant,
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(
+                                    color: _selectedCategoryId == cat.id
+                                        ? Color(cat.colorValue)
+                                        : Colors.transparent,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    cat.name,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: _selectedCategoryId == cat.id
+                                          ? Color(cat.colorValue)
+                                          : colorScheme.onSurfaceVariant,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )),
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // ---- Tag Management ----
+                      Text(
+                        'Tags',
+                        style: theme.textTheme.labelLarge?.copyWith(
+                          color: colorScheme.onSurface.withOpacity(0.6),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: _tagController,
+                              style: theme.textTheme.bodyMedium,
+                              decoration: InputDecoration(
+                                hintText: 'Add a tag...',
+                                prefixIcon: const Icon(Icons.tag, size: 16),
+                                isDense: true,
+                                contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                              onFieldSubmitted: (_) => _addTag(),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          IconButton(
+                            onPressed: _addTag,
+                            icon: const Icon(Icons.add_circle_outline_rounded),
+                            color: colorScheme.primary,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: _tags.map((tag) => Chip(
+                          label: Text(tag, style: const TextStyle(fontSize: 12)),
+                          onDeleted: () => _removeTag(tag),
+                          backgroundColor: colorScheme.surfaceVariant,
+                          side: BorderSide.none,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        )).toList(),
                       ),
 
                       const SizedBox(height: 24),

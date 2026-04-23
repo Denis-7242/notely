@@ -1,50 +1,38 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'note.dart';
+part of 'category.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class NoteAdapter extends TypeAdapter<Note> {
+class CategoryAdapter extends TypeAdapter<Category> {
   @override
-  final int typeId = 0;
+  final int typeId = 1;
 
   @override
-  Note read(BinaryReader reader) {
+  Category read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Note(
+    return Category(
       id: fields[0] as String,
-      title: fields[1] as String,
-      content: fields[2] as String,
-      createdDate: fields[3] as DateTime,
-      updatedDate: fields[4] as DateTime,
-      tags: (fields[5] as List).cast<String>(),
-      categoryId: fields[6] as String?,
+      name: fields[1] as String,
+      colorValue: fields[2] as int,
     );
   }
 
   @override
-  void write(BinaryWriter writer, Note obj) {
+  void write(BinaryWriter writer, Category obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.title)
+      ..write(obj.name)
       ..writeByte(2)
-      ..write(obj.content)
-      ..writeByte(3)
-      ..write(obj.createdDate)
-      ..writeByte(4)
-      ..write(obj.updatedDate)
-      ..writeByte(5)
-      ..write(obj.tags)
-      ..writeByte(6)
-      ..write(obj.categoryId);
+      ..write(obj.colorValue);
   }
 
   @override
@@ -53,7 +41,7 @@ class NoteAdapter extends TypeAdapter<Note> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is NoteAdapter &&
+      other is CategoryAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../models/note.dart';
+import '../models/category.dart';
+import '../services/note_provider.dart';
+import 'package:provider/provider.dart';
 
 class NoteCard extends StatelessWidget {
   final Note note;
@@ -24,6 +27,16 @@ class NoteCard extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final isDarkMode = theme.brightness == Brightness.dark;
+    final noteProvider = Provider.of<NoteProvider>(context, listen: false);
+
+    Color categoryColor = colorScheme.primary;
+    if (note.categoryId != null) {
+      final category = noteProvider.categories.firstWhere(
+        (c) => c.id == note.categoryId,
+        orElse: () => Category(id: '', name: '', colorValue: colorScheme.primary.value),
+      );
+      categoryColor = Color(category.colorValue);
+    }
 
     return Dismissible(
       key: Key(note.id),
@@ -58,84 +71,121 @@ class NoteCard extends StatelessWidget {
                 width: 1,
               ),
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Stack(
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: colorScheme.primary.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Icon(
-                          Icons.notes_rounded,
-                          size: 18,
-                          color: colorScheme.primary,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          note.title,
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w700,
-                            color: colorScheme.onSurface,
-                            fontSize: 17,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      IconButton(
-                        icon: Icon(
-                          Icons.delete_outline_rounded,
-                          size: 20,
-                          color: colorScheme.error.withOpacity(0.6),
-                        ),
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
-                        onPressed: onDelete,
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  if (note.content.isNotEmpty)
-                    Text(
-                      note.content,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: colorScheme.onSurface.withOpacity(0.6),
-                        height: 1.5,
-                        fontSize: 14,
-                      ),
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
+                  // Category Color Strip
+                  Positioned(
+                    left: 0,
+                    top: 0,
+                    bottom: 0,
+                    child: Container(
+                      width: 6,
+                      color: categoryColor,
                     ),
-
-                  const SizedBox(height: 16),
-
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.calendar_today_rounded,
-                        size: 12,
-                        color: colorScheme.onSurface.withOpacity(0.3),
-                      ),
-                      const SizedBox(width: 6),
-                      Text(
-                        _formatDate(note.updatedDate),
-                        style: theme.textTheme.labelSmall?.copyWith(
-                          color: colorScheme.onSurface.withOpacity(0.3),
-                          fontWeight: FontWeight.w500,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: categoryColor.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Icon(
+                                Icons.notes_rounded,
+                                size: 18,
+                                color: categoryColor,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                note.title,
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: colorScheme.onSurface,
+                                  fontSize: 17,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            IconButton(
+                              icon: Icon(
+                                Icons.delete_outline_rounded,
+                                size: 20,
+                                color: colorScheme.error.withOpacity(0.6),
+                              ),
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
+                              onPressed: onDelete,
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
+
+                        const SizedBox(height: 12),
+
+                        if (note.content.isNotEmpty)
+                          Text(
+                            note.content,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: colorScheme.onSurface.withOpacity(0.6),
+                              height: 1.5,
+                              fontSize: 14,
+                            ),
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+
+                        const SizedBox(height: 16),
+
+                        if (note.tags.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: Wrap(
+                              spacing: 6,
+                              runSpacing: 6,
+                              children: note.tags.take(3).map((tag) => Chip(
+                                label: Text(
+                                  tag,
+                                  style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
+                                ),
+                                visualDensity: VisualDensity.compact,
+                                backgroundColor: colorScheme.surfaceVariant,
+                                side: BorderSide.none,
+                                labelPadding: const EdgeInsets.symmetric(horizontal: 4),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                              )).toList(),
+                            ),
+                          ),
+
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.calendar_today_rounded,
+                              size: 12,
+                              color: colorScheme.onSurface.withOpacity(0.3),
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              _formatDate(note.updatedDate),
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                color: colorScheme.onSurface.withOpacity(0.3),
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

@@ -4,6 +4,7 @@ import '../services/note_provider.dart';
 import '../services/theme_provider.dart';
 import '../widgets/note_card.dart';
 import 'note_editor_screen.dart';
+import '../models/category.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -60,14 +61,14 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-    void _openEditor(BuildContext context, {String? noteId}) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => NoteEditorScreen(noteId: noteId),
-        ),
-      );
-    }
+  void _openEditor(BuildContext context, {String? noteId}) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => NoteEditorScreen(noteId: noteId),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -162,39 +163,94 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-                child: SearchBar(
-                  controller: _searchController,
-                  hintText: 'Search your notes...',
-                  leading: Icon(
-                    Icons.search_rounded,
-                    color: colorScheme.onSurface.withOpacity(0.4),
-                  ),
-                  trailing: [
-                    if (_searchController.text.isNotEmpty)
-                      IconButton(
-                        icon: const Icon(Icons.clear_rounded),
-                        onPressed: () {
-                          _searchController.clear();
-                          noteProvider.setSearchQuery('');
-                        },
+                child: Column(
+                  children: [
+                    SearchBar(
+                      controller: _searchController,
+                      hintText: 'Search your notes...',
+                      leading: Icon(
+                        Icons.search_rounded,
+                        color: colorScheme.onSurface.withOpacity(0.4),
                       ),
-                  ],
-                  onChanged: (query) {
-                    noteProvider.setSearchQuery(query);
-                  },
-                  elevation: WidgetStatePropertyAll(0),
-                  backgroundColor: WidgetStatePropertyAll(
-                    colorScheme.surface.withOpacity(0.7),
-                  ),
-                  shape: WidgetStatePropertyAll(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      side: BorderSide(color: colorScheme.outlineVariant.withOpacity(0.3)),
+                      trailing: [
+                        if (_searchController.text.isNotEmpty)
+                          IconButton(
+                            icon: const Icon(Icons.clear_rounded),
+                            onPressed: () {
+                              _searchController.clear();
+                              noteProvider.setSearchQuery('');
+                            },
+                          ),
+                      ],
+                      onChanged: (query) {
+                        noteProvider.setSearchQuery(query);
+                      },
+                      elevation: WidgetStatePropertyAll(0),
+                      backgroundColor: WidgetStatePropertyAll(
+                        colorScheme.surface.withOpacity(0.7),
+                      ),
+                      shape: WidgetStatePropertyAll(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          side: BorderSide(color: colorScheme.outlineVariant.withOpacity(0.3)),
+                        ),
+                      ),
+                      padding: const WidgetStatePropertyAll(
+                        EdgeInsets.symmetric(horizontal: 16),
+                      ),
                     ),
-                  ),
-                  padding: const WidgetStatePropertyAll(
-                    EdgeInsets.symmetric(horizontal: 16),
-                  ),
+                    const SizedBox(height: 12),
+                    // ---- Filter Bar ----
+                    SizedBox(
+                      height: 40,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          FilterChip(
+                            label: const Text('All'),
+                            selected: noteProvider.selectedCategoryId == null &&
+                                        noteProvider.selectedTag == null,
+                            onSelected: (_) {
+                              noteProvider.setCategoryId(null);
+                              noteProvider.setSelectedTag(null);
+                            },
+                            selectedColor: colorScheme.primary.withOpacity(0.2),
+                            checkmarkColor: colorScheme.primary,
+                            backgroundColor: colorScheme.surfaceVariant,
+                            labelStyle: TextStyle(
+                              color: noteProvider.selectedCategoryId == null &&
+                                      noteProvider.selectedTag == null
+                                      ? colorScheme.primary
+                                      : colorScheme.onSurfaceVariant,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          ...noteProvider.categories.map((cat) => Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: FilterChip(
+                              label: Text(cat.name),
+                              selected: noteProvider.selectedCategoryId == cat.id,
+                              onSelected: (_) => noteProvider.setCategoryId(
+                                noteProvider.selectedCategoryId == cat.id ? null : cat.id,
+                              ),
+                              selectedColor: Color(cat.colorValue).withOpacity(0.2),
+                              checkmarkColor: Color(cat.colorValue),
+                              backgroundColor: colorScheme.surfaceVariant,
+                              labelStyle: TextStyle(
+                                color: noteProvider.selectedCategoryId == cat.id
+                                    ? Color(cat.colorValue)
+                                    : colorScheme.onSurfaceVariant,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          )),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
 

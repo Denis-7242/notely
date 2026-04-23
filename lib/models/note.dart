@@ -28,6 +28,12 @@ class Note extends HiveObject {
   @HiveField(4)
   late DateTime updatedDate; // When the note was last edited
 
+  @HiveField(5)
+  List<String> tags = []; // Tags for categorization
+
+  @HiveField(6)
+  String? categoryId; // Reference to Category model
+
   // Named constructor for convenience
   Note({
     required this.id,
@@ -35,6 +41,8 @@ class Note extends HiveObject {
     required this.content,
     required this.createdDate,
     required this.updatedDate,
+    this.tags = const [],
+    this.categoryId,
   });
 
   // Creates a copy of this note with optional overrides.
@@ -45,6 +53,8 @@ class Note extends HiveObject {
     String? content,
     DateTime? createdDate,
     DateTime? updatedDate,
+    List<String>? tags,
+    String? categoryId,
   }) {
     return Note(
       id: id ?? this.id,
@@ -52,6 +62,8 @@ class Note extends HiveObject {
       content: content ?? this.content,
       createdDate: createdDate ?? this.createdDate,
       updatedDate: updatedDate ?? this.updatedDate,
+      tags: tags ?? this.tags,
+      categoryId: categoryId ?? this.categoryId,
     );
   }
 }
