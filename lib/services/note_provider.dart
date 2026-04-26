@@ -32,6 +32,15 @@ class NoteProvider extends ChangeNotifier {
       result = result.where((note) => note.tags.contains(_selectedTag)).toList();
     }
 
+    // 4. Priority Sorting
+    // Sort by: isPinned (descending) then updatedDate (descending)
+    result.sort((a, b) {
+      if (a.isPinned != b.isPinned) {
+        return b.isPinned ? 1 : -1;
+      }
+      return b.updatedDate.compareTo(a.updatedDate);
+    });
+
     return result;
   }
 
@@ -132,5 +141,12 @@ class NoteProvider extends ChangeNotifier {
       _selectedCategoryId = null;
     }
     notifyListeners();
+  }
+
+  Future<void> togglePin(String id) async {
+    final note = _notes.firstWhere((n) => n.id == id);
+    final updatedNote = note.copyWith(isPinned: !note.isPinned);
+    await _storage.updateNote(updatedNote);
+    loadNotes();
   }
 }

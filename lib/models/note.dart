@@ -34,6 +34,9 @@ class Note extends HiveObject {
   @HiveField(6)
   String? categoryId; // Reference to Category model
 
+  @HiveField(7)
+  bool isPinned = false; // Priority pin status
+
   // Named constructor for convenience
   Note({
     required this.id,
@@ -43,6 +46,7 @@ class Note extends HiveObject {
     required this.updatedDate,
     this.tags = const [],
     this.categoryId,
+    this.isPinned = false,
   });
 
   // Creates a copy of this note with optional overrides.
@@ -55,6 +59,7 @@ class Note extends HiveObject {
     DateTime? updatedDate,
     List<String>? tags,
     String? categoryId,
+    bool? isPinned,
   }) {
     return Note(
       id: id ?? this.id,
@@ -64,6 +69,7 @@ class Note extends HiveObject {
       updatedDate: updatedDate ?? this.updatedDate,
       tags: tags ?? this.tags,
       categoryId: categoryId ?? this.categoryId,
+      isPinned: isPinned ?? this.isPinned,
     );
   }
 }

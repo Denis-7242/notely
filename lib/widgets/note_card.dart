@@ -118,16 +118,60 @@ class NoteCard extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                            IconButton(
+                            if (note.isPinned)
+                              Icon(
+                                Icons.push_pin_rounded,
+                                size: 18,
+                                color: colorScheme.primary,
+                              ),
+                            const SizedBox(width: 8),
+                            PopupMenuButton<String>(
                               icon: Icon(
-                                Icons.delete_outline_rounded,
+                                Icons.more_vert_rounded,
                                 size: 20,
-                                color: colorScheme.error.withOpacity(0.6),
+                                color: colorScheme.onSurface.withOpacity(0.6),
                               ),
                               padding: EdgeInsets.zero,
                               constraints: const BoxConstraints(),
-                              onPressed: onDelete,
+                              onSelected: (value) {
+                                if (value == 'pin') {
+                                  noteProvider.togglePin(note.id);
+                                } else if (value == 'delete') {
+                                  onDelete();
+                                }
+                              },
+                              itemBuilder: (context) => [
+                                PopupMenuItem(
+                                  value: 'pin',
+                                  child: ListTile(
+                                    leading: Icon(
+                                      note.isPinned ? Icons.push_pin_rounded : Icons.push_pin_outlined,
+                                      size: 20,
+                                      color: colorScheme.onSurface,
+                                    ),
+                                    title: Text(
+                                      note.isPinned ? 'Unpin' : 'Pin',
+                                      style: TextStyle(color: colorScheme.onSurface),
+                                    ),
+                                  ),
+                                ),
+                                PopupMenuItem(
+                                  value: 'delete',
+                                  child: ListTile(
+                                    leading: Icon(
+                                      Icons.delete_outline_rounded,
+                                      size: 20,
+                                      color: colorScheme.error,
+                                    ),
+                                    title: Text(
+                                      'Delete',
+                                      style: TextStyle(color: colorScheme.error),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
+                          ],
                           ],
                         ),
 
