@@ -172,9 +172,7 @@ class NoteCard extends StatelessWidget {
                               ],
                             ),
                           ],
-                          ],
                         ),
-
                         const SizedBox(height: 12),
 
                         if (note.content.isNotEmpty)

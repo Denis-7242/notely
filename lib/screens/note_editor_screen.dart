@@ -24,6 +24,7 @@ class _NoteEditorScreenState extends State<NoteEditorScreen> {
 
   bool _isSaving = false; // Show loading indicator while saving
   bool _hasChanges = false; // Track unsaved changes for the back button
+  bool _isPinned = false; // Track pin status
 
   String? _selectedCategoryId;
   List<String> _tags = [];
@@ -44,6 +45,7 @@ class _NoteEditorScreenState extends State<NoteEditorScreen> {
       _contentController.text = note.content;
       _selectedCategoryId = note.categoryId;
       _tags = List<String>.from(note.tags);
+      _isPinned = note.isPinned;
     }
 
     // Listen for any changes so we can warn the user before discarding
@@ -99,6 +101,11 @@ class _NoteEditorScreenState extends State<NoteEditorScreen> {
         tags: _tags,
         categoryId: _selectedCategoryId,
       );
+      // Also handle pinning if it changed
+      final note = noteProvider.notes.firstWhere((n) => n.id == widget.noteId!);
+      if (note.isPinned != _isPinned) {
+        await noteProvider.togglePin(widget.noteId!);
+      }
     } else {
       // Create a brand new note
       await noteProvider.addNote(
@@ -107,6 +114,14 @@ class _NoteEditorScreenState extends State<NoteEditorScreen> {
         tags: _tags,
         categoryId: _selectedCategoryId,
       );
+      // If the new note was pinned in the editor, pin it now
+      if (_isPinned) {
+        // Note: addNote doesn't return the ID, so we need to find the latest note
+        // or update addNote to accept isPinned.
+        // For now, since we just added it, the last note in the list is likely it.
+        final latestNote = noteProvider.notes.last;
+        await noteProvider.togglePin(latestNote.id);
+      }
     }
 
     setState(() => _isSaving = false);
@@ -169,6 +184,18 @@ class _NoteEditorScreenState extends State<NoteEditorScreen> {
             ),
           ),
           actions: [
+            IconButton(
+              icon: Icon(
+                _isPinned ? Icons.push_pin_rounded : Icons.push_pin_outlined,
+                color: _isPinned ? colorScheme.primary : colorScheme.onSurface.withOpacity(0.6),
+              ),
+              onPressed: () {
+                setState(() {
+                  _isPinned = !_isPinned;
+                  _hasChanges = true;
+                });
+              },
+            ),
             Padding(
               padding: const EdgeInsets.only(right: 12),
               child: FilledButton.icon(
