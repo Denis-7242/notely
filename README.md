@@ -110,7 +110,7 @@ This project serves as a masterclass in several advanced Flutter concepts:
 The journey doesn't end here. I'm planning the following enhancements to take Notely to the next level:
 
 - [x] **Smart Categorization**: Implementation of tags and color-coded categories for better organization.
-- [ ] **Priority Pinning**: Ability to pin critical notes to the top of the feed.
+- [x] **Priority Pinning**: Ability to pin critical notes to the top of the feed.
 - [ ] **Rich Text Engine**: Integration of bold, italics, and bullet points for professional formatting.
 - [ ] **Universal Export**: Support for exporting notes as high-quality PDFs or plain text files.
 - [ ] **Cloud Synchronization**: Migration to a Firebase backend for seamless cross-device sync.
