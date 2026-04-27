@@ -39,7 +39,7 @@ Notely isn't just a tool; it's a visual statement. We've implemented a **"Midnig
 | Feature | Description |
 | :--- | :--- |
 | **🎯 Intelligent Search** | Real-time, ultra-responsive filtering by text, category, and tags. |
-| **✍️ Focus Editor** | A borderless, distraction-free writing environment with smart tagging and category selection. |
+| **✍️ Focus Editor** | A borderless, distraction-free writing environment with Markdown support (bold, italics, bullets), smart tagging and category selection. |
 | **📁 Persistent Vault** | High-performance local storage via Hive NoSQL, ensuring your notes are always there. |
 | **🧤 Intuitive UX** | Swipe-to-delete gestures, a welcoming empty state, and smart navigation guards. |
 | **🌙 Theme Mastery** | One-tap transition between a crisp Light mode and a luxurious Dark mode. |
@@ -111,7 +111,7 @@ The journey doesn't end here. I'm planning the following enhancements to take No
 
 - [x] **Smart Categorization**: Implementation of tags and color-coded categories for better organization.
 - [x] **Priority Pinning**: Ability to pin critical notes to the top of the feed.
-- [ ] **Rich Text Engine**: Integration of bold, italics, and bullet points for professional formatting.
+- [x] **Rich Text Engine**: Integration of bold, italics, and bullet points for professional formatting.
 - [ ] **Universal Export**: Support for exporting notes as high-quality PDFs or plain text files.
 - [ ] **Cloud Synchronization**: Migration to a Firebase backend for seamless cross-device sync.
 - [ ] **Collaborative Sharing**: Ability to share specific notes via secure links.
