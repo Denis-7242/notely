@@ -178,13 +178,15 @@ class NoteCard extends StatelessWidget {
 
                         if (note.content.isNotEmpty)
                           SizedBox(
-                            maxHeight: 72, // Approx 3 lines of text (14 * 1.5 * 3 + padding)
+                            height: 72, // Approx 3 lines of text (14 * 1.5 * 3 + padding)
                             child: MarkdownBody(
                               data: note.content,
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                color: colorScheme.onSurface.withOpacity(0.6),
-                                height: 1.5,
-                                fontSize: 14,
+                              styleSheet: MarkdownStyleSheet(
+                                p: theme.textTheme.bodyMedium?.copyWith(
+                                  color: colorScheme.onSurface.withOpacity(0.6),
+                                  height: 1.5,
+                                  fontSize: 14,
+                                ),
                               ),
                             ),
                           ),
