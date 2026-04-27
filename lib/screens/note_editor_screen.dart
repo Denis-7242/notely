@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/note_provider.dart';
 import '../models/category.dart';
+import '../widgets/markdown_toolbar.dart';
 
 class NoteEditorScreen extends StatefulWidget {
   // null means "create new", a string ID means "edit existing"
@@ -55,6 +56,37 @@ class _NoteEditorScreenState extends State<NoteEditorScreen> {
 
   void _onChanged() {
     if (!_hasChanges) setState(() => _hasChanges = true);
+  }
+
+  void _applyFormatting(String action) {
+    final text = _contentController.text;
+    final selection = _contentController.selection;
+
+    if (selection.isCollapsed) return;
+
+    final selectedText = selection.textInside(text);
+    String replacement = '';
+
+    if (action == 'bold') {
+      replacement = '**$selectedText**';
+    } else if (action == 'italic') {
+      replacement = '*$selectedText*';
+    } else if (action == 'bullet') {
+      // For bullets, we just insert at the beginning of the line or selection
+      // Simplified: wrap selection with a newline and bullet if not already there
+      replacement = '\n- $selectedText';
+    }
+
+    if (replacement.isNotEmpty) {
+      final newText = text.replaceRange(selection.start, selection.end, replacement);
+      _contentController.value = TextEditingValue(
+        text: newText,
+        selection: TextSelection.collapsed(
+          offset: selection.start + replacement.length,
+        ),
+      );
+      setState(() => _hasChanges = true);
+    }
   }
 
   void _addTag() {
@@ -419,6 +451,7 @@ class _NoteEditorScreenState extends State<NoteEditorScreen> {
                       const SizedBox(height: 24),
 
                       // ---- Content Field ----
+                      MarkdownToolbar(onAction: (action) => _applyFormatting(action)),
                       TextFormField(
                         controller: _contentController,
                         style: theme.textTheme.bodyLarge?.copyWith(
