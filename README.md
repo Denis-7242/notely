@@ -123,7 +123,7 @@ The journey doesn't end here. I'm planning the following enhancements to take No
 
 Made by **Denis** with ❤️ using Flutter.
 
-Built as a professional Flutter showcase project. Feel free to fork, modify, and learn from the code!
+Feel free to fork, modify, and learn from the code!
 
 <p align="center">
   <i>"Simplicity is the ultimate sophistication." — Leonardo da Vinci</i>
